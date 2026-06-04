@@ -19,20 +19,13 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
 
-      - name: Cache Gradle
-        uses: actions/cache@v4
+      - name: Set up Gradle
+        uses: gradle/actions/setup-gradle@v4
         with:
-          path: |
-            ~/.gradle/caches
-            ~/.gradle/wrapper
-          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle.kts', '**/libs.versions.toml', '**/gradle-wrapper.properties') }}
-          restore-keys: ${{ runner.os }}-gradle-
-
-      - name: Grant execute permission for gradlew
-        run: chmod +x gradlew
+          gradle-version: '8.2'
 
       - name: Assemble debug
-        run: ./gradlew assembleDebug --stacktrace
+        run: gradle assembleDebug --stacktrace
 
   unit-tests:
     name: Unit Tests
@@ -47,20 +40,13 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
 
-      - name: Cache Gradle
-        uses: actions/cache@v4
+      - name: Set up Gradle
+        uses: gradle/actions/setup-gradle@v4
         with:
-          path: |
-            ~/.gradle/caches
-            ~/.gradle/wrapper
-          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle.kts', '**/libs.versions.toml', '**/gradle-wrapper.properties') }}
-          restore-keys: ${{ runner.os }}-gradle-
-
-      - name: Grant execute permission for gradlew
-        run: chmod +x gradlew
+          gradle-version: '8.2'
 
       - name: Run unit tests
-        run: ./gradlew testDebugUnitTest --stacktrace
+        run: gradle testDebugUnitTest --stacktrace
 
       - name: Upload unit test results
         if: always()
@@ -82,20 +68,13 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
 
-      - name: Cache Gradle
-        uses: actions/cache@v4
+      - name: Set up Gradle
+        uses: gradle/actions/setup-gradle@v4
         with:
-          path: |
-            ~/.gradle/caches
-            ~/.gradle/wrapper
-          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle.kts', '**/libs.versions.toml', '**/gradle-wrapper.properties') }}
-          restore-keys: ${{ runner.os }}-gradle-
-
-      - name: Grant execute permission for gradlew
-        run: chmod +x gradlew
+          gradle-version: '8.2'
 
       - name: Run Paparazzi snapshot tests
-        run: ./gradlew verifyPaparazziDebug --stacktrace
+        run: gradle verifyPaparazziDebug --stacktrace
 
       - name: Upload Paparazzi failure diffs
         if: failure()
