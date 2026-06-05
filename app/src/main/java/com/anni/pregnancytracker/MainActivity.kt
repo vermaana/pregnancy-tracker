@@ -17,7 +17,7 @@ class MainActivity : ComponentActivity() {
             PregnancyTrackerTheme {
                 Surface(
                     modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colorScheme.background
+                    color = MaterialTheme.colorScheme.background,
                 ) {
                     Text(text = "Pregnancy Tracker")
                 }
