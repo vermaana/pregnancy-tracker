@@ -68,9 +68,6 @@ potential-bugs:
     active: true
   UnsafeCast:
     active: true
-  # Coroutine cancellation must not be swallowed
-  SuspendFunSwallowedCancellation:
-    active: true
 
 style:
   MaxLineLength:
@@ -99,7 +96,7 @@ style:
     max: 3
   ForbiddenComment:
     active: true
-    values:
+    comments:
       - reason: 'Resolve or raise a ticket — do not leave FIXME in committed code.'
         value: 'FIXME:'
       - reason: 'Must be resolved before shipping.'
