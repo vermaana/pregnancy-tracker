@@ -37,7 +37,7 @@ jobs:
           path: app/build/reports/jacoco/jacocoTestReport/
 
       - name: Post coverage comment
-        uses: madrapps/jacoco-report@v2.0.4
+        uses: madrapps/jacoco-report@v1.8.0
         with:
           paths: ${{ github.workspace }}/app/build/reports/jacoco/jacocoTestReport/jacocoTestReport.xml
           token: ${{ secrets.GITHUB_TOKEN }}
