@@ -1,59 +1,80 @@
 package com.anni.pregnancytracker.ui.theme
 
 import android.app.Activity
-import android.os.Build
+import androidx.annotation.VisibleForTesting
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.darkColorScheme
-import androidx.compose.material3.dynamicDarkColorScheme
-import androidx.compose.material3.dynamicLightColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.SideEffect
-import androidx.compose.ui.graphics.toArgb
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
+import androidx.compose.ui.text.font.FontFamily
 import androidx.core.view.WindowCompat
 
-private val DarkColorScheme = darkColorScheme(
-    primary = Pink80,
-    secondary = PinkGrey80,
-    tertiary = Pink80,
+private val LightColorScheme = lightColorScheme(
+    primary = Rose,
+    onPrimary = Cream,
+    primaryContainer = Blush,
+    onPrimaryContainer = DeepRose,
+    secondary = Mauve,
+    onSecondary = Cream,
+    secondaryContainer = MauveSurface,
+    onSecondaryContainer = DeepRose,
+    background = Cream,
+    onBackground = TextPrimary,
+    surface = Cream,
+    onSurface = TextPrimary,
+    surfaceVariant = BlushLight,
+    onSurfaceVariant = TextSecondary,
+    outline = DividerPink,
 )
 
-private val LightColorScheme = lightColorScheme(
-    primary = Pink40,
-    secondary = PinkGrey40,
-    tertiary = Pink40,
+private val DarkColorScheme = darkColorScheme(
+    primary = DarkPrimary,
+    onPrimary = DarkSurface,
+    primaryContainer = DeepRose,
+    onPrimaryContainer = Cream,
+    secondary = Blush,
+    onSecondary = DarkSurface,
+    background = DarkSurface,
+    onBackground = Cream,
+    surface = DarkSurface,
+    onSurface = Cream,
+    surfaceVariant = TextPrimary,
+    onSurfaceVariant = BlushLight,
 )
 
 @Composable
 fun PregnancyTrackerTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
-    dynamicColor: Boolean = true,
+    useFallbackFonts: Boolean = false,
     content: @Composable () -> Unit,
 ) {
-    val colorScheme = when {
-        dynamicColor && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S -> {
-            val context = LocalContext.current
-            if (darkTheme) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
-        }
-        darkTheme -> DarkColorScheme
-        else -> LightColorScheme
+    val colorScheme = if (darkTheme) DarkColorScheme else LightColorScheme
+    val typography = if (useFallbackFonts) {
+        buildTypography(serifFamily = FontFamily.Serif, sansFamily = FontFamily.SansSerif)
+    } else {
+        Typography
     }
+
     val view = LocalView.current
-    if (!view.isInEditMode) {
+    val activity = view.context as? Activity
+    if (!view.isInEditMode && activity != null) {
         SideEffect {
-            val window = (view.context as Activity).window
-            @Suppress("DEPRECATION")
-            window.statusBarColor = colorScheme.primary.toArgb()
-            WindowCompat.getInsetsController(window, view).isAppearanceLightStatusBars = !darkTheme
+            WindowCompat.getInsetsController(activity.window, view).isAppearanceLightStatusBars = !darkTheme
         }
     }
 
     MaterialTheme(
         colorScheme = colorScheme,
-        typography = Typography,
+        typography = typography,
         content = content,
     )
+}
+
+@VisibleForTesting
+@Composable
+fun PregnancyTrackerTestTheme(content: @Composable () -> Unit) {
+    PregnancyTrackerTheme(useFallbackFonts = true, content = content)
 }

@@ -1,3 +1,13 @@
 <resources>
     <string name="app_name">Pregnancy Tracker</string>
+    <string name="label_name">Your name</string>
+    <string name="label_age">Your age</string>
+    <string name="label_lmp_date">Last menstrual period</string>
+    <string name="button_begin_journey">Begin my journey</string>
+    <string name="cd_calendar_icon">Open date picker</string>
+    <string name="label_gestational_week">W%d</string>
+    <string name="home_header_title">Your Pregnancy</string>
+    <string name="home_due_date">Due %s</string>
+    <string name="cd_lmp_highlight">LMP</string>
+    <string name="cd_ovulation_highlight">OV</string>
 </resources>
