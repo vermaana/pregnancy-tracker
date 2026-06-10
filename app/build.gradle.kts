@@ -6,6 +6,7 @@ plugins {
     alias(libs.plugins.paparazzi)
     alias(libs.plugins.ktlint)
     alias(libs.plugins.detekt)
+    id("jacoco")
 }
 
 android {
@@ -21,6 +22,9 @@ android {
     }
 
     buildTypes {
+        debug {
+            enableUnitTestCoverage = true
+        }
         release {
             isMinifyEnabled = false
         }
@@ -95,4 +99,45 @@ tasks.withType<io.gitlab.arturbosch.detekt.Detekt>().configureEach {
         html.required.set(true)
         sarif.required.set(true)
     }
+}
+
+jacoco {
+    toolVersion = "0.8.12"
+}
+
+tasks.register<JacocoReport>("jacocoTestReport") {
+    dependsOn("testDebugUnitTest")
+
+    reports {
+        xml.required.set(true)
+        html.required.set(true)
+    }
+
+    val excludes = listOf(
+        // Android generated
+        "**/R.class",
+        "**/R$*.class",
+        "**/BuildConfig.*",
+        "**/Manifest*.*",
+        // Hilt / Dagger generated
+        "**/Hilt_*.*",
+        "**/*_HiltModules*.*",
+        "**/*_Factory.*",
+        "**/*_MembersInjector.*",
+        "**/hilt_aggregated_deps/**",
+        "**/dagger/hilt/**",
+        // Compose compiler generated
+        "**/*ComposableSingletons*.*",
+    )
+
+    classDirectories.setFrom(
+        fileTree("${layout.buildDirectory.get()}/tmp/kotlin-classes/debug") { exclude(excludes) },
+        fileTree(
+            "${layout.buildDirectory.get()}/intermediates/javac/debug/compileDebugJavaWithJavac/classes",
+        ) { exclude(excludes) },
+    )
+    sourceDirectories.setFrom(files("src/main/java", "src/main/kotlin"))
+    executionData.setFrom(
+        fileTree(layout.buildDirectory.get()) { include("**/*.exec", "**/*.ec") },
+    )
 }
