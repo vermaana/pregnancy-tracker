@@ -107,8 +107,12 @@ tasks.register<JacocoReport>("jacocoTestReport") {
         "**/*ComposableSingletons*.*",
     )
 
+    // Resolve Kotlin class output from the compile task itself — the path changed in AGP 9 + KGP 2.x
+    // and hardcoding tmp/kotlin-classes/debug no longer works.
+    val kotlinClasses = tasks.named<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>("compileDebugKotlin")
+        .flatMap { it.destinationDirectory }
     classDirectories.setFrom(
-        fileTree("${layout.buildDirectory.get()}/tmp/kotlin-classes/debug") { exclude(excludes) },
+        files(kotlinClasses.map { dir -> fileTree(dir.asFile) { exclude(excludes) } }),
         fileTree(
             "${layout.buildDirectory.get()}/intermediates/javac/debug/compileDebugJavaWithJavac/classes",
         ) { exclude(excludes) },
