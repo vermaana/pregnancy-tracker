@@ -2,6 +2,8 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.paparazzi)
+    alias(libs.plugins.ktlint)
+    alias(libs.plugins.detekt)
 }
 
 android {
@@ -50,4 +52,23 @@ dependencies {
     implementation(libs.compose.material3)
     implementation(libs.activity.compose)
     debugImplementation(libs.compose.ui.tooling)
+}
+
+ktlint {
+    android.set(true)
+    ignoreFailures.set(false)
+    reporters {
+        reporter(org.jlleitschuh.gradle.ktlint.reporter.ReporterType.PLAIN)
+        reporter(org.jlleitschuh.gradle.ktlint.reporter.ReporterType.SARIF)
+    }
+}
+
+detekt {
+    config.setFrom("$rootDir/detekt/detekt.yml")
+    buildUponDefaultConfig = true
+    parallel = true
+    reports {
+        html.required.set(true)
+        sarif.required.set(true)
+    }
 }

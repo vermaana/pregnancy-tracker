@@ -1,0 +1,111 @@
+# detekt configuration for pregnancy-tracker
+# buildUponDefaultConfig = true, so only overrides are listed here.
+
+build:
+  maxIssues: 0
+
+complexity:
+  # Composable functions tend to be longer due to nested layout DSL
+  LongMethod:
+    threshold: 60
+    ignoreAnnotated:
+      - 'Composable'
+  # Composable functions routinely take many parameters (content, modifiers, callbacks, state)
+  LongParameterList:
+    functionThreshold: 8
+    constructorThreshold: 8
+    ignoreDefaultParameters: true
+    ignoreDataClasses: true
+    ignoreAnnotated:
+      - 'Composable'
+  CyclomaticComplexMethod:
+    threshold: 15
+    # Single when() mapping a sealed class is not real complexity
+    ignoreSingleWhenExpression: true
+  TooManyFunctions:
+    thresholdInFiles: 20
+    thresholdInClasses: 15
+    ignoreAnnotated:
+      - 'Composable'
+
+coroutines:
+  active: true
+  GlobalCoroutineUsage:
+    active: true
+  InjectDispatcher:
+    active: true
+    dispatcherNames:
+      - 'IO'
+      - 'Default'
+      - 'Unconfined'
+  RedundantSuspendModifier:
+    active: true
+  SleepInsteadOfDelay:
+    active: true
+  SuspendFunSwallowedCancellation:
+    active: true
+  SuspendFunWithFlowReturnType:
+    active: true
+
+naming:
+  # Composable functions are named in PascalCase (e.g. fun HomeScreen())
+  FunctionNaming:
+    ignoreAnnotated:
+      - 'Composable'
+  # Enforce correct root package
+  InvalidPackageDeclaration:
+    active: true
+    rootPackage: 'com.anni.pregnancytracker'
+  # Allow _privateVar for backing properties (e.g. _uiState / uiState pattern in ViewModels)
+  VariableNaming:
+    privateVariablePattern: '(_)?[a-z][A-Za-z0-9]*'
+  # Allow _privateProp for the same reason
+  ObjectPropertyNaming:
+    privatePropertyPattern: '(_)?[A-Za-z][_A-Za-z0-9]*'
+
+potential-bugs:
+  UnsafeCallOnNullableType:
+    active: true
+  UnsafeCast:
+    active: true
+
+style:
+  MaxLineLength:
+    maxLineLength: 120
+    excludePackageStatements: true
+    excludeImportStatements: true
+  MagicNumber:
+    # Named arguments and constants don't need to be extracted further
+    ignoreNamedArgument: true
+    ignorePropertyDeclaration: true
+    ignoreConstantDeclaration: true
+    ignoreCompanionObjectPropertyDeclaration: true
+    ignoreHashCodeFunction: true
+    # -1, 0, 1, 2 are universally understood
+    ignoreNumbers:
+      - '-1'
+      - '0'
+      - '1'
+      - '2'
+    excludes:
+      - '**/test/**'
+      - '**/*Test.kt'
+  ReturnCount:
+    # Guard clauses (early returns) are encouraged for readability
+    excludeGuardClauses: true
+    max: 3
+  ForbiddenComment:
+    active: true
+    comments:
+      - reason: 'Resolve or raise a ticket — do not leave FIXME in committed code.'
+        value: 'FIXME:'
+      - reason: 'Must be resolved before shipping.'
+        value: 'STOPSHIP:'
+  WildcardImport:
+    active: true
+    excludeImports:
+      - 'androidx.compose.ui.tooling.preview.*'
+  UnusedPrivateMember:
+    active: true
+  VarCouldBeVal:
+    active: true
