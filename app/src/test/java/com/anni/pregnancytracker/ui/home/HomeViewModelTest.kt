@@ -48,7 +48,7 @@ class HomeViewModelTest {
     @Test
     fun `initial state is Loading`() {
         every { userRepository.getUserProfile() } returns flowOf(profile)
-        every { calendarBuilder.build(any(), any()) } returns emptyList()
+        every { calendarBuilder.buildForMonth(any(), any(), any()) } returns emptyList()
         every { calendarBuilder.gestationalWeekFor(any(), any()) } returns 1
         viewModel = HomeViewModel(userRepository, calendarBuilder)
 
@@ -59,7 +59,7 @@ class HomeViewModelTest {
     fun `with valid profile emits Success`() = runTest {
         val calendar = listOf<CalendarWeek>()
         every { userRepository.getUserProfile() } returns flowOf(profile)
-        every { calendarBuilder.build(lmpDate, any()) } returns calendar
+        every { calendarBuilder.buildForMonth(any(), any(), any()) } returns calendar
         every { calendarBuilder.gestationalWeekFor(any(), lmpDate) } returns 8
         viewModel = HomeViewModel(userRepository, calendarBuilder)
 
@@ -76,7 +76,7 @@ class HomeViewModelTest {
     @Test
     fun `due date is lmpDate plus 40 weeks`() = runTest {
         every { userRepository.getUserProfile() } returns flowOf(profile)
-        every { calendarBuilder.build(any(), any()) } returns emptyList()
+        every { calendarBuilder.buildForMonth(any(), any(), any()) } returns emptyList()
         every { calendarBuilder.gestationalWeekFor(any(), any()) } returns 1
         viewModel = HomeViewModel(userRepository, calendarBuilder)
 
@@ -110,5 +110,24 @@ class HomeViewModelTest {
         job.cancel()
 
         assertTrue(viewModel.uiState.value is HomeUiState.Error)
+    }
+
+    @Test
+    fun `navigateMonth updates displayedMonth in state`() = runTest {
+        every { userRepository.getUserProfile() } returns flowOf(profile)
+        every { calendarBuilder.buildForMonth(any(), any(), any()) } returns emptyList()
+        every { calendarBuilder.gestationalWeekFor(any(), any()) } returns 1
+        viewModel = HomeViewModel(userRepository, calendarBuilder)
+
+        val job = launch { viewModel.uiState.collect {} }
+        testDispatcher.scheduler.advanceUntilIdle()
+
+        val initialMonth = (viewModel.uiState.value as HomeUiState.Success).displayedMonth
+        viewModel.navigateMonth(-1)
+        testDispatcher.scheduler.advanceUntilIdle()
+        job.cancel()
+
+        val newMonth = (viewModel.uiState.value as HomeUiState.Success).displayedMonth
+        assertEquals(initialMonth.minusMonths(1), newMonth)
     }
 }

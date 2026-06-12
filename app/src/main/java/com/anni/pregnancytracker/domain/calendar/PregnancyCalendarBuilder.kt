@@ -5,6 +5,7 @@ import com.anni.pregnancytracker.domain.model.CalendarDay
 import com.anni.pregnancytracker.domain.model.CalendarWeek
 import java.time.DayOfWeek
 import java.time.LocalDate
+import java.time.YearMonth
 import java.time.temporal.ChronoUnit
 import javax.inject.Inject
 
@@ -31,6 +32,44 @@ class PregnancyCalendarBuilder @Inject constructor() {
                     isLmpDay = day == lmpDate,
                     isOvulationDay = day == ovulationDate,
                     isCurrentMonth = !day.isBefore(lmpDate) && !day.isAfter(dueDate),
+                    isDisabled = false,
+                )
+            }
+
+            val weekNumber = days.firstOrNull { !it.date.isBefore(lmpDate) }?.gestationalWeek
+                ?: gestationalWeekFor(weekStart, lmpDate)
+
+            weeks.add(CalendarWeek(weekNumber = weekNumber, days = days))
+            weekStart = weekStart.plusWeeks(1)
+        }
+
+        return weeks.toList()
+    }
+
+    fun buildForMonth(lmpDate: LocalDate, today: LocalDate, yearMonth: YearMonth): List<CalendarWeek> {
+        val ovulationDate = lmpDate.plusDays(Constants.OVULATION_OFFSET_DAYS)
+        val firstOfMonth = yearMonth.atDay(1)
+        val lastOfMonth = yearMonth.atEndOfMonth()
+
+        val startMonday = firstOfMonth.with(DayOfWeek.MONDAY).let { monday ->
+            if (monday.isAfter(firstOfMonth)) monday.minusWeeks(1) else monday
+        }
+        val endSunday = lastOfMonth.with(DayOfWeek.SUNDAY)
+
+        val weeks = mutableListOf<CalendarWeek>()
+        var weekStart = startMonday
+
+        while (!weekStart.isAfter(endSunday)) {
+            val days = (0 until Constants.DAYS_IN_WEEK).map { offset ->
+                val day = weekStart.plusDays(offset.toLong())
+                CalendarDay(
+                    date = day,
+                    gestationalWeek = gestationalWeekFor(day, lmpDate),
+                    isToday = day == today,
+                    isLmpDay = day == lmpDate,
+                    isOvulationDay = day == ovulationDate,
+                    isCurrentMonth = day.month == yearMonth.month && day.year == yearMonth.year,
+                    isDisabled = day.isBefore(lmpDate) || day.isAfter(today),
                 )
             }
 

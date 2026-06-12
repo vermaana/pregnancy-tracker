@@ -31,11 +31,12 @@ private data class DayCellStyle(
 )
 
 private fun dayCellStyle(day: CalendarDay): DayCellStyle = when {
+    !day.isCurrentMonth -> DayCellStyle(Color.Transparent, Color.Transparent, null, false)
+    day.isDisabled -> DayCellStyle(Color.Transparent, TextSecondary.copy(alpha = 0.3f), null, true)
     day.isLmpDay -> DayCellStyle(LmpAmber, Color.White, "LMP", true)
     day.isOvulationDay -> DayCellStyle(OvulationSage, Color.White, "OV", true)
     day.isToday -> DayCellStyle(Rose, Color.White, null, true)
-    day.isCurrentMonth -> DayCellStyle(Color.Transparent, TextPrimary, null, true)
-    else -> DayCellStyle(Color.Transparent, TextSecondary.copy(alpha = 0.4f), null, false)
+    else -> DayCellStyle(Color.Transparent, TextPrimary, null, true)
 }
 
 @Composable

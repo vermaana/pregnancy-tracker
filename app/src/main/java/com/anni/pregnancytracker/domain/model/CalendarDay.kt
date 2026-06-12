@@ -9,4 +9,5 @@ data class CalendarDay(
     val isLmpDay: Boolean,
     val isOvulationDay: Boolean,
     val isCurrentMonth: Boolean,
+    val isDisabled: Boolean,
 )

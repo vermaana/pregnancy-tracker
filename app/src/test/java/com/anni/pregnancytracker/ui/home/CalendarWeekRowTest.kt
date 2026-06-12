@@ -29,6 +29,7 @@ class CalendarWeekRowTest {
                 isLmpDay = i == isLmp,
                 isOvulationDay = i == isOvulation,
                 isCurrentMonth = true,
+                isDisabled = false,
             )
         }
         return CalendarWeek(weekNumber = 5, days = days)

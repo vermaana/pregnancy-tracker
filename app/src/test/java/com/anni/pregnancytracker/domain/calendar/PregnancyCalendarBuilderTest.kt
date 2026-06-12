@@ -2,6 +2,7 @@ package com.anni.pregnancytracker.domain.calendar
 
 import com.anni.pregnancytracker.core.Constants
 import java.time.LocalDate
+import java.time.YearMonth
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
@@ -110,5 +111,70 @@ class PregnancyCalendarBuilderTest {
         val calendar = builder.build(lmpDate, today)
         val ovulationDays = calendar.flatMap { it.days }.filter { it.isOvulationDay }
         assertEquals(1, ovulationDays.size)
+    }
+
+    // buildForMonth tests
+
+    @Test
+    fun `buildForMonth returns only weeks covering that month`() {
+        val yearMonth = YearMonth.of(2025, 12)
+        val weeks = builder.buildForMonth(lmpDate, today, yearMonth)
+        assertTrue(weeks.isNotEmpty())
+        val allDays = weeks.flatMap { it.days }
+        assertTrue(allDays.any { it.date.month.value == 12 && it.date.year == 2025 })
+    }
+
+    @Test
+    fun `buildForMonth each week has exactly 7 days`() {
+        val weeks = builder.buildForMonth(lmpDate, today, YearMonth.of(2025, 12))
+        assertTrue(weeks.all { it.days.size == Constants.DAYS_IN_WEEK })
+    }
+
+    @Test
+    fun `buildForMonth isCurrentMonth true only for days in the requested month`() {
+        val yearMonth = YearMonth.of(2025, 12)
+        val weeks = builder.buildForMonth(lmpDate, today, yearMonth)
+        val allDays = weeks.flatMap { it.days }
+        assertTrue(
+            allDays.all { day ->
+                val inMonth = day.date.month.value == 12 && day.date.year == 2025
+                day.isCurrentMonth == inMonth
+            },
+        )
+    }
+
+    @Test
+    fun `buildForMonth days before lmpDate are disabled`() {
+        val yearMonth = YearMonth.of(2025, 11)
+        val weeks = builder.buildForMonth(lmpDate, today, yearMonth)
+        val daysBeforeLmp = weeks.flatMap { it.days }.filter { it.date.isBefore(lmpDate) }
+        assertTrue(daysBeforeLmp.isNotEmpty())
+        assertTrue(daysBeforeLmp.all { it.isDisabled })
+    }
+
+    @Test
+    fun `buildForMonth days after today are disabled`() {
+        val yearMonth = YearMonth.of(2025, 12)
+        val weeks = builder.buildForMonth(lmpDate, today, yearMonth)
+        val daysAfterToday = weeks.flatMap { it.days }.filter { it.date.isAfter(today) && it.isCurrentMonth }
+        assertTrue(daysAfterToday.isNotEmpty())
+        assertTrue(daysAfterToday.all { it.isDisabled })
+    }
+
+    @Test
+    fun `buildForMonth lmpDate and today are not disabled`() {
+        val yearMonth = YearMonth.of(2025, 12)
+        val weeks = builder.buildForMonth(lmpDate, today, yearMonth)
+        val allDays = weeks.flatMap { it.days }
+        val todayDay = allDays.firstOrNull { it.isToday }
+        if (todayDay != null) assertFalse(todayDay.isDisabled)
+    }
+
+    @Test
+    fun `buildForMonth lmpDay is flagged on correct date`() {
+        val yearMonth = YearMonth.of(2025, 11)
+        val weeks = builder.buildForMonth(lmpDate, today, yearMonth)
+        val lmpDay = weeks.flatMap { it.days }.firstOrNull { it.date == lmpDate }
+        assertTrue(lmpDay?.isLmpDay == true)
     }
 }
