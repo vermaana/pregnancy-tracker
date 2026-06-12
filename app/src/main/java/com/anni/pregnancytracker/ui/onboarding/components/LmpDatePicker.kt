@@ -28,9 +28,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.unit.dp
 import com.anni.pregnancytracker.R
-import com.anni.pregnancytracker.ui.theme.Blush
-import com.anni.pregnancytracker.ui.theme.Rose
-import com.anni.pregnancytracker.ui.theme.TextSecondary
 import java.time.Instant
 import java.time.LocalDate
 import java.time.ZoneId
@@ -52,6 +49,10 @@ fun LmpDatePicker(
         .toInstant()
         .toEpochMilli()
 
+    val primary = MaterialTheme.colorScheme.primary
+    val onSurfaceVariant = MaterialTheme.colorScheme.onSurfaceVariant
+    val containerColor = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.3f)
+
     Column(modifier = modifier) {
         Box {
             OutlinedTextField(
@@ -63,18 +64,18 @@ fun LmpDatePicker(
                     Icon(
                         imageVector = Icons.Default.DateRange,
                         contentDescription = stringResource(R.string.cd_calendar_icon),
-                        tint = Rose,
+                        tint = primary,
                     )
                 },
                 isError = error != null,
                 colors = OutlinedTextFieldDefaults.colors(
-                    focusedBorderColor = Rose,
-                    unfocusedBorderColor = TextSecondary,
-                    focusedLabelColor = Rose,
-                    unfocusedContainerColor = Blush.copy(alpha = 0.3f),
-                    focusedContainerColor = Blush.copy(alpha = 0.3f),
-                    disabledBorderColor = if (error != null) MaterialTheme.colorScheme.error else TextSecondary,
-                    disabledLabelColor = TextSecondary,
+                    focusedBorderColor = primary,
+                    unfocusedBorderColor = onSurfaceVariant,
+                    focusedLabelColor = primary,
+                    unfocusedContainerColor = containerColor,
+                    focusedContainerColor = containerColor,
+                    disabledBorderColor = if (error != null) MaterialTheme.colorScheme.error else onSurfaceVariant,
+                    disabledLabelColor = onSurfaceVariant,
                     disabledTextColor = MaterialTheme.colorScheme.onSurface,
                 ),
                 enabled = false,

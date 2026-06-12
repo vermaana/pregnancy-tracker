@@ -16,10 +16,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.anni.pregnancytracker.R
 import com.anni.pregnancytracker.domain.model.UserProfile
-import com.anni.pregnancytracker.ui.theme.Blush
-import com.anni.pregnancytracker.ui.theme.DeepRose
-import com.anni.pregnancytracker.ui.theme.Rose
-import com.anni.pregnancytracker.ui.theme.TextSecondary
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
@@ -32,33 +28,33 @@ fun HomeHeader(profile: UserProfile, dueDate: LocalDate, todayGestationalWeek: I
     Card(
         modifier = modifier
             .fillMaxWidth()
-            .padding(horizontal = 16.dp, vertical = 12.dp),
-        colors = CardDefaults.cardColors(containerColor = Blush),
+            .padding(vertical = 12.dp),
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.primaryContainer),
         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
     ) {
         Column(modifier = Modifier.padding(20.dp)) {
             Text(
                 text = "Hi, ${profile.name}",
                 style = MaterialTheme.typography.titleMedium,
-                color = TextSecondary,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
             )
             Spacer(modifier = Modifier.height(4.dp))
             Text(
                 text = stringResource(R.string.home_header_title),
                 style = MaterialTheme.typography.displayMedium,
-                color = DeepRose,
+                color = MaterialTheme.colorScheme.onPrimaryContainer,
             )
             Spacer(modifier = Modifier.height(8.dp))
             Text(
                 text = "Week $todayGestationalWeek",
                 style = MaterialTheme.typography.headlineMedium,
-                color = Rose,
+                color = MaterialTheme.colorScheme.primary,
             )
             Spacer(modifier = Modifier.height(4.dp))
             Text(
                 text = stringResource(R.string.home_due_date, formattedDueDate),
                 style = MaterialTheme.typography.bodyLarge,
-                color = TextSecondary,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
             )
         }
     }

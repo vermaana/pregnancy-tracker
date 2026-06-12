@@ -21,9 +21,6 @@ import com.anni.pregnancytracker.ui.home.components.CalendarWeekRow
 import com.anni.pregnancytracker.ui.home.components.HomeHeader
 import com.anni.pregnancytracker.ui.home.components.MonthNavigationHeader
 import com.anni.pregnancytracker.ui.home.components.WeekDayHeaders
-import com.anni.pregnancytracker.ui.theme.Cream
-import com.anni.pregnancytracker.ui.theme.Rose
-import com.anni.pregnancytracker.ui.theme.TextSecondary
 
 @Composable
 fun HomeScreen(viewModel: HomeViewModel = hiltViewModel()) {
@@ -53,10 +50,10 @@ private fun HomeLoadingState() {
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(Cream),
+            .background(MaterialTheme.colorScheme.background),
         contentAlignment = Alignment.Center,
     ) {
-        CircularProgressIndicator(color = Rose)
+        CircularProgressIndicator(color = MaterialTheme.colorScheme.primary)
     }
 }
 
@@ -65,13 +62,13 @@ private fun HomeErrorState(message: String) {
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(Cream),
+            .background(MaterialTheme.colorScheme.background),
         contentAlignment = Alignment.Center,
     ) {
         Text(
             text = message,
             style = MaterialTheme.typography.bodyLarge,
-            color = TextSecondary,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
         )
     }
 }
@@ -81,8 +78,9 @@ private fun HomeSuccessContent(uiState: HomeUiState.Success, onNavigatePrev: () 
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(Cream)
-            .verticalScroll(rememberScrollState()),
+            .background(MaterialTheme.colorScheme.background)
+            .verticalScroll(rememberScrollState())
+            .padding(horizontal = 16.dp),
     ) {
         HomeHeader(
             profile = uiState.profile,
@@ -95,9 +93,8 @@ private fun HomeSuccessContent(uiState: HomeUiState.Success, onNavigatePrev: () 
             canNavigateNext = uiState.canNavigateNext,
             onNavigatePrev = onNavigatePrev,
             onNavigateNext = onNavigateNext,
-            modifier = Modifier.padding(horizontal = 8.dp),
         )
-        WeekDayHeaders(modifier = Modifier.padding(horizontal = 8.dp))
+        WeekDayHeaders()
         uiState.monthCalendar.forEach { week ->
             CalendarWeekRow(week = week)
         }

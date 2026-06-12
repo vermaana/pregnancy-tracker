@@ -11,9 +11,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.anni.pregnancytracker.ui.theme.Blush
-import com.anni.pregnancytracker.ui.theme.Rose
-import com.anni.pregnancytracker.ui.theme.TextSecondary
 
 @Composable
 fun OnboardingTextField(
@@ -33,11 +30,11 @@ fun OnboardingTextField(
             keyboardOptions = keyboardOptions,
             singleLine = true,
             colors = OutlinedTextFieldDefaults.colors(
-                focusedBorderColor = Rose,
-                unfocusedBorderColor = TextSecondary,
-                focusedLabelColor = Rose,
-                unfocusedContainerColor = Blush.copy(alpha = 0.3f),
-                focusedContainerColor = Blush.copy(alpha = 0.3f),
+                focusedBorderColor = MaterialTheme.colorScheme.primary,
+                unfocusedBorderColor = MaterialTheme.colorScheme.onSurfaceVariant,
+                focusedLabelColor = MaterialTheme.colorScheme.primary,
+                unfocusedContainerColor = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.3f),
+                focusedContainerColor = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.3f),
             ),
             modifier = Modifier.fillMaxWidth(),
         )

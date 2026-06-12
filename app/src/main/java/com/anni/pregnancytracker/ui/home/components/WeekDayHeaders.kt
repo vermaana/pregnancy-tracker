@@ -10,7 +10,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import com.anni.pregnancytracker.ui.theme.TextSecondary
 
 private val DAY_HEADERS = listOf("M", "T", "W", "T", "F", "S", "S")
 
@@ -30,7 +29,7 @@ fun WeekDayHeaders(modifier: Modifier = Modifier) {
             Text(
                 text = day,
                 style = MaterialTheme.typography.labelSmall,
-                color = TextSecondary,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
                 textAlign = TextAlign.Center,
                 modifier = Modifier.weight(1f),
             )
