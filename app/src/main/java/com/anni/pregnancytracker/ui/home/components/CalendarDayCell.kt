@@ -19,9 +19,6 @@ import androidx.compose.ui.unit.sp
 import com.anni.pregnancytracker.domain.model.CalendarDay
 import com.anni.pregnancytracker.ui.theme.LmpAmber
 import com.anni.pregnancytracker.ui.theme.OvulationSage
-import com.anni.pregnancytracker.ui.theme.Rose
-import com.anni.pregnancytracker.ui.theme.TextPrimary
-import com.anni.pregnancytracker.ui.theme.TextSecondary
 
 private data class DayCellStyle(
     val backgroundColor: Color,
@@ -30,18 +27,23 @@ private data class DayCellStyle(
     val showDayNumber: Boolean,
 )
 
-private fun dayCellStyle(day: CalendarDay): DayCellStyle = when {
+private fun dayCellStyle(day: CalendarDay, primary: Color, onPrimary: Color, onSurface: Color): DayCellStyle = when {
     !day.isCurrentMonth -> DayCellStyle(Color.Transparent, Color.Transparent, null, false)
-    day.isDisabled -> DayCellStyle(Color.Transparent, TextSecondary.copy(alpha = 0.3f), null, true)
+    day.isDisabled -> DayCellStyle(Color.Transparent, onSurface.copy(alpha = 0.3f), null, true)
     day.isLmpDay -> DayCellStyle(LmpAmber, Color.White, "LMP", true)
     day.isOvulationDay -> DayCellStyle(OvulationSage, Color.White, "OV", true)
-    day.isToday -> DayCellStyle(Rose, Color.White, null, true)
-    else -> DayCellStyle(Color.Transparent, TextPrimary, null, true)
+    day.isToday -> DayCellStyle(primary, onPrimary, null, true)
+    else -> DayCellStyle(Color.Transparent, onSurface, null, true)
 }
 
 @Composable
 fun CalendarDayCell(day: CalendarDay, modifier: Modifier = Modifier) {
-    val style = dayCellStyle(day)
+    val style = dayCellStyle(
+        day = day,
+        primary = MaterialTheme.colorScheme.primary,
+        onPrimary = MaterialTheme.colorScheme.onPrimary,
+        onSurface = MaterialTheme.colorScheme.onSurface,
+    )
 
     Box(
         modifier = modifier

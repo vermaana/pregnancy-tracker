@@ -14,7 +14,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.anni.pregnancytracker.R
 import com.anni.pregnancytracker.domain.model.CalendarWeek
-import com.anni.pregnancytracker.ui.theme.WeekLabelTaupe
 
 @Composable
 fun CalendarWeekRow(week: CalendarWeek) {
@@ -27,7 +26,7 @@ fun CalendarWeekRow(week: CalendarWeek) {
         Text(
             text = stringResource(R.string.label_gestational_week, week.weekNumber),
             style = MaterialTheme.typography.labelSmall,
-            color = WeekLabelTaupe,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
             textAlign = TextAlign.Center,
             modifier = Modifier.width(32.dp),
         )

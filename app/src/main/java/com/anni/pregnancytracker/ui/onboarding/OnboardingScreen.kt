@@ -18,7 +18,6 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -38,10 +37,6 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.anni.pregnancytracker.R
 import com.anni.pregnancytracker.ui.onboarding.components.LmpDatePicker
 import com.anni.pregnancytracker.ui.onboarding.components.OnboardingTextField
-import com.anni.pregnancytracker.ui.theme.Cream
-import com.anni.pregnancytracker.ui.theme.DeepRose
-import com.anni.pregnancytracker.ui.theme.Rose
-import com.anni.pregnancytracker.ui.theme.TextSecondary
 
 private const val ENTER_ANIMATION_DURATION_MS = 600
 
@@ -80,7 +75,7 @@ internal fun OnboardingContent(
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .background(Cream)
+                .background(MaterialTheme.colorScheme.background)
                 .verticalScroll(rememberScrollState())
                 .padding(horizontal = 32.dp)
                 .imePadding(),
@@ -91,12 +86,12 @@ internal fun OnboardingContent(
             Text(
                 text = "Welcome",
                 style = MaterialTheme.typography.displayLarge,
-                color = Rose,
+                color = MaterialTheme.colorScheme.primary,
             )
             Text(
                 text = "Let's get to know you",
                 style = MaterialTheme.typography.bodyLarge,
-                color = TextSecondary,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
             )
 
             OnboardingTextField(
@@ -132,18 +127,17 @@ internal fun OnboardingContent(
             Button(
                 onClick = { onEvent(OnboardingEvent.SubmitClicked) },
                 enabled = !uiState.isLoading,
-                colors = ButtonDefaults.buttonColors(containerColor = Rose),
                 modifier = Modifier.fillMaxWidth(),
             ) {
                 if (uiState.isLoading) {
                     CircularProgressIndicator(
-                        color = Cream,
+                        color = MaterialTheme.colorScheme.onPrimary,
                         modifier = Modifier.align(Alignment.CenterVertically),
                     )
                 } else {
                     Text(
                         text = stringResource(R.string.button_begin_journey),
-                        color = Cream,
+                        color = MaterialTheme.colorScheme.onPrimary,
                         style = MaterialTheme.typography.titleMedium,
                     )
                 }
@@ -152,7 +146,7 @@ internal fun OnboardingContent(
             Text(
                 text = "Due date is estimated at 40 weeks from your LMP",
                 style = MaterialTheme.typography.labelSmall,
-                color = DeepRose,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
                 modifier = Modifier.align(Alignment.CenterHorizontally),
             )
 

@@ -75,6 +75,6 @@ fun PregnancyTrackerTheme(
 
 @VisibleForTesting
 @Composable
-fun PregnancyTrackerTestTheme(content: @Composable () -> Unit) {
-    PregnancyTrackerTheme(useFallbackFonts = true, content = content)
+fun PregnancyTrackerTestTheme(darkTheme: Boolean = false, content: @Composable () -> Unit) {
+    PregnancyTrackerTheme(darkTheme = darkTheme, useFallbackFonts = true, content = content)
 }

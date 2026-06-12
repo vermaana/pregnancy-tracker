@@ -16,8 +16,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.anni.pregnancytracker.ui.theme.DeepRose
-import com.anni.pregnancytracker.ui.theme.TextSecondary
 import java.time.YearMonth
 import java.time.format.DateTimeFormatter
 
@@ -33,11 +31,13 @@ fun MonthNavigationHeader(
     modifier: Modifier = Modifier,
 ) {
     val monthLabel = remember(displayedMonth) { displayedMonth.format(MONTH_FORMATTER) }
+    val activeColor = MaterialTheme.colorScheme.primary
+    val disabledColor = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.3f)
 
     Row(
         modifier = modifier
             .fillMaxWidth()
-            .padding(horizontal = 4.dp, vertical = 4.dp),
+            .padding(vertical = 4.dp),
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically,
     ) {
@@ -45,19 +45,19 @@ fun MonthNavigationHeader(
             Icon(
                 imageVector = Icons.AutoMirrored.Filled.ArrowBack,
                 contentDescription = "Previous month",
-                tint = if (canNavigatePrev) DeepRose else TextSecondary.copy(alpha = 0.3f),
+                tint = if (canNavigatePrev) activeColor else disabledColor,
             )
         }
         Text(
             text = monthLabel,
             style = MaterialTheme.typography.titleMedium,
-            color = DeepRose,
+            color = MaterialTheme.colorScheme.onBackground,
         )
         IconButton(onClick = onNavigateNext, enabled = canNavigateNext) {
             Icon(
                 imageVector = Icons.AutoMirrored.Filled.ArrowForward,
                 contentDescription = "Next month",
-                tint = if (canNavigateNext) DeepRose else TextSecondary.copy(alpha = 0.3f),
+                tint = if (canNavigateNext) activeColor else disabledColor,
             )
         }
     }
